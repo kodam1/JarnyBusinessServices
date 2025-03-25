@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Modern Lead Generation Directory</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <style>
+        body { background-color: #9059ed; color: white; font-family: Arial, sans-serif; }
+        .container { margin-top: 20px; }
+        .table-container { background: #e5def1; padding: 20px; border-radius: 10px; }
+        .table { color: white; }
+        .dark-mode { background-color: #222; color: white; }
+        .dark-mode .table { background: #333; color: white; }
+        .pagination { justify-content: center; }
+        .btn { border-radius: 20px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 class="text-center my-4"><i class="fas fa-address-book"></i> Stylish Lead Generation Directories</h2>
+        <p class="text-center">Total Records: <span id="totalRecords"></span></p>
+        <div class="d-flex justify-content-between mb-3">
+            <input type="text" id="searchInput" class="form-control w-50" placeholder="Search directories..." onkeyup="filterTable()">
+            <button class="btn btn-warning" onclick="exportToCSV()">Download CSV</button>
+            <button class="btn btn-light" onclick="toggleDarkMode()">Toggle Dark Mode</button>
+        </div>
+        <div class="table-container">
+            <table class="table table-hover" id="directoryTable">
+                <thead class="table-dark">
+                    <tr>
+                        <th onclick="sortTable(0)">Category</th>
+                        <th onclick="sortTable(1)">Directory/Tool Name</th>
+                        <th>URL</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody"></tbody>
+            </table>
+        </div>
+        <nav>
+            <ul class="pagination" id="pagination"></ul>
+        </nav>
+    </div>
+    <script>
+      /*   const data = [...Array(1000)].map((_, i) => ({
+            category: `Category ${i % 15 + 1}`,
+            name: `LeadGen Tool ${i + 1}`,
+            url: `https://example.com/tool${i + 1}`
+        }));
+
+        let currentPage = 1;
+        const rowsPerPage = 10;
+        document.getElementById("totalRecords").innerText = data.length;
+*/
+ 
+   const data = [
+            {category: "Local Business Directories", name: "Google My Business", url: "https://www.google.com/business/"},
+            {category: "Local Business Directories", name: "Bing Places", url: "https://www.bingplaces.com"},
+            {category: "Local Business Directories", name: "Foursquare", url: "https://foursquare.com"},
+            {category: "B2B Networking Directories", name: "ZoomInfo", url: "https://www.zoominfo.com"},
+            {category: "B2B Networking Directories", name: "Owler", url: "https://www.owler.com"},
+            {category: "B2B Networking Directories", name: "Glassdoor", url: "https://www.glassdoor.com"},
+            {category: "Social Media Lead Directories", name: "Facebook Business", url: "https://www.facebook.com/business"},
+            {category: "Social Media Lead Directories", name: "Instagram Business", url: "https://www.instagram.com"},
+            {category: "Social Media Lead Directories", name: "Twitter Advanced Search", url: "https://twitter.com/search-advanced"},
+            {category: "Government & Public Records", name: "Data.gov", url: "https://www.data.gov"},
+            {category: "Government & Public Records", name: "GovUK Business Directory", url: "https://www.gov.uk/get-information-about-a-company"},
+            {category: "Government & Public Records", name: "Canada Business Directory", url: "https://www.ic.gc.ca"},
+            {category: "Finance & Investment Directories", name: "AngelList", url: "https://angel.co"},
+            {category: "Finance & Investment Directories", name: "Crunchbase", url: "https://www.crunchbase.com"},
+            {category: "Finance & Investment Directories", name: "CB Insights", url: "https://www.cbinsights.com"},
+			 { category: "Local Business Directories", name: "Google My Business", url: "https://www.google.com/business/" },
+            { category: "Local Business Directories", name: "Bing Places", url: "https://www.bingplaces.com/" },
+            { category: "Email & Contact Extraction", name: "Hunter.io", url: "https://hunter.io/" },
+            { category: "CRM & Lead Management", name: "HubSpot CRM", url: "https://www.hubspot.com/products/crm" },
+            { category: "Email & Contact Extraction", name: "Snov.io", url: "https://snov.io/" },
+            { category: "Social Media Lead Gen", name: "LinkedIn Sales Navigator", url: "https://business.linkedin.com/sales-solutions/sales-navigator" },
+            { category: "Marketing Automation", name: "Mailchimp", url: "https://mailchimp.com/" },
+            { category: "Sales Intelligence", name: "ZoomInfo", url: "https://www.zoominfo.com/" },
+            { category: "Sales Automation", name: "Apollo.io", url: "https://www.apollo.io/" },
+            { category: "Lead Enrichment", name: "Clearbit", url: "https://clearbit.com/" },
+            { category: "Cold Emailing", name: "Woodpecker", url: "https://woodpecker.co/" },
+            { category: "Cold Emailing", name: "Lemlist", url: "https://www.lemlist.com/" },
+            { category: "Data Scraping", name: "Scrapy", url: "https://scrapy.org/" },
+            { category: "Sales Engagement", name: "Outreach.io", url: "https://www.outreach.io/" },
+            { category: "Customer Intelligence", name: "InsideView", url: "https://www.insideview.com/" },
+            { category: "Sales & Marketing", name: "Leadfeeder", url: "https://www.leadfeeder.com/" },
+            { category: "Web Scraping", name: "Octoparse", url: "https://www.octoparse.com/" },
+            { category: "Lead Databases", name: "Lead411", url: "https://www.lead411.com/" },
+            { category: "Social Media Data", name: "Nimble", url: "https://www.nimble.com/" },
+            { category: "Data Extraction", name: "ParseHub", url: "https://www.parsehub.com/" },
+            { category: "B2B Directories", name: "Yellow Pages", url: "https://www.yellowpages.com/" },
+            { category: "B2B Directories", name: "Yelp Business", url: "https://biz.yelp.com/" },
+            { category: "Freelance Marketplaces", name: "Upwork", url: "https://www.upwork.com/" },
+            { category: "Freelance Marketplaces", name: "Fiverr", url: "https://www.fiverr.com/" },
+            { category: "Lead Prospecting", name: "Uplead", url: "https://www.uplead.com/" },
+            { category: "Business Directories", name: "Angie's List", url: "https://www.angi.com/" },
+            { category: "B2B Lead Generation", name: "Lusha", url: "https://www.lusha.com/" },
+            { category: "Job Boards", name: "Indeed", url: "https://www.indeed.com/" },
+            { category: "Job Boards", name: "Glassdoor", url: "https://www.glassdoor.com/" },
+            { category: "CRM & Lead Management", name: "Zoho CRM", url: "https://www.zoho.com/crm/" }
+			
+        ];
+
+        let currentPage = 1;
+        const rowsPerPage = 10;
+        document.getElementById("totalRecords").innerText = data.length;
+
+        function displayTable(page) {
+            let start = (page - 1) * rowsPerPage;
+            let end = start + rowsPerPage;
+            let rows = data.slice(start, end).map(item => `
+                <tr>
+                    <td>${item.category}</td>
+                    <td>${item.name}</td>
+                    <td><a href="${item.url}" target="_blank" class="btn btn-info btn-sm">Visit</a></td>
+                    <td><button class="btn btn-success btn-sm" onclick="copyToClipboard('${item.url}')">Copy</button></td>
+                </tr>
+            `).join('');
+            document.getElementById("tableBody").innerHTML = rows;
+            updatePagination(page);
+        }
+		
+		
+        function displayTable(page) {
+            let start = (page - 1) * rowsPerPage;
+            let end = start + rowsPerPage;
+            let rows = data.slice(start, end).map(item => `
+                <tr>
+                    <td>${item.category}</td>
+                    <td>${item.name}</td>
+                    <td><a href="${item.url}" target="_blank" class="btn btn-info btn-sm">Visit</a></td>
+                    <td><button class="btn btn-success btn-sm" onclick="copyToClipboard('${item.url}')">Copy</button></td>
+                </tr>
+            `).join('');
+            document.getElementById("tableBody").innerHTML = rows;
+            updatePagination(page);
+        }
+
+        function updatePagination(page) {
+            let totalPages = Math.ceil(data.length / rowsPerPage);
+            let paginationHTML = `<li class="page-item ${page === 1 ? 'disabled' : ''}"><a class="page-link" href="#" onclick="displayTable(1)">First</a></li>`;
+            for (let i = Math.max(1, page - 2); i <= Math.min(totalPages, page + 2); i++) {
+                paginationHTML += `<li class="page-item ${i === page ? 'active' : ''}"><a class="page-link" href="#" onclick="displayTable(${i})">${i}</a></li>`;
+            }
+            paginationHTML += `<li class="page-item ${page === totalPages ? 'disabled' : ''}"><a class="page-link" href="#" onclick="displayTable(${totalPages})">Last</a></li>`;
+            document.getElementById("pagination").innerHTML = paginationHTML;
+        }
+
+        function toggleDarkMode() {
+            document.body.classList.toggle("dark-mode");
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => alert("Copied: " + text));
+        }
+        
+        function sortTable(columnIndex) {
+            data.sort((a, b) => {
+                let valueA = Object.values(a)[columnIndex].toLowerCase();
+                let valueB = Object.values(b)[columnIndex].toLowerCase();
+                return valueA.localeCompare(valueB);
+            });
+            displayTable(1);
+        }
+        
+        function filterTable() {
+            let filter = document.getElementById("searchInput").value.toLowerCase();
+            let filteredData = data.filter(item => Object.values(item).some(val => val.toLowerCase().includes(filter)));
+            document.getElementById("totalRecords").innerText = filteredData.length;
+            let rows = filteredData.slice(0, rowsPerPage).map(item => `
+                <tr>
+                    <td>${item.category}</td>
+                    <td>${item.name}</td>
+                    <td><a href="${item.url}" target="_blank" class="btn btn-info btn-sm">Visit</a></td>
+                    <td><button class="btn btn-success btn-sm" onclick="copyToClipboard('${item.url}')">Copy</button></td>
+                </tr>
+            `).join('');
+            document.getElementById("tableBody").innerHTML = rows;
+        }
+		
+		
+        function exportToCSV() {
+            let csvContent = "data:text/csv;charset=utf-8,Category,Directory/Tool Name,URL\n";
+            data.forEach(row => {
+                csvContent += `${row.category},${row.name},${row.url}\n`;
+            });
+            let encodedUri = encodeURI(csvContent);
+            let link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "lead_generation_data.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+
+        displayTable(1);
+    </script>
+</body>
+</html>

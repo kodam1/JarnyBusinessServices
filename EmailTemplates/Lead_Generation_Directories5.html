@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Lead Generation Directories</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f8f9fa; }
+        .container { margin-top: 20px; }
+        .table { background: white; }
+        .dark-mode { background-color: #343a40; color: white; }
+        .dark-mode .table { background: #454d55; color: white; }
+        .dark-mode .table-dark { background: #212529; }
+        .pagination { justify-content: center; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 class="text-center my-4">Lead Generation Directories & Tools</h2>
+        <p class="text-center">Total Records: <span id="totalRecords"></span></p>
+        <div class="d-flex justify-content-between mb-3">
+            <input type="text" id="searchInput" class="form-control w-50" placeholder="Search directories..." onkeyup="filterTable()">
+            <button class="btn btn-primary" onclick="exportToCSV()">Download CSV</button>
+            <button class="btn btn-dark" onclick="toggleDarkMode()">Toggle Dark Mode</button>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped" id="directoryTable">
+                <thead class="table-dark">
+                    <tr>
+                        <th onclick="sortTable(0)">Category</th>
+                        <th onclick="sortTable(1)">Directory/Tool Name</th>
+                        <th>URL</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <!-- Data dynamically added -->
+                </tbody>
+            </table>
+        </div>
+        <nav>
+            <ul class="pagination" id="pagination"></ul>
+        </nav>
+    </div>
+    <script>
+        const data = [
+             { category: "Local Business Directories", name: "Google My Business", url: "https://www.google.com/business/" },
+            { category: "Local Business Directories", name: "Bing Places", url: "https://www.bingplaces.com/" },
+            { category: "Email & Contact Extraction", name: "Hunter.io", url: "https://hunter.io/" },
+            { category: "CRM & Lead Management", name: "HubSpot CRM", url: "https://www.hubspot.com/products/crm" },
+            { category: "Email & Contact Extraction", name: "Snov.io", url: "https://snov.io/" },
+            { category: "Social Media Lead Gen", name: "LinkedIn Sales Navigator", url: "https://business.linkedin.com/sales-solutions/sales-navigator" },
+            { category: "Marketing Automation", name: "Mailchimp", url: "https://mailchimp.com/" },
+            { category: "Sales Intelligence", name: "ZoomInfo", url: "https://www.zoominfo.com/" },
+            { category: "Sales Automation", name: "Apollo.io", url: "https://www.apollo.io/" },
+            { category: "Lead Enrichment", name: "Clearbit", url: "https://clearbit.com/" },
+            { category: "Cold Emailing", name: "Woodpecker", url: "https://woodpecker.co/" },
+            { category: "Cold Emailing", name: "Lemlist", url: "https://www.lemlist.com/" },
+            { category: "Data Scraping", name: "Scrapy", url: "https://scrapy.org/" },
+            { category: "Sales Engagement", name: "Outreach.io", url: "https://www.outreach.io/" },
+            { category: "Customer Intelligence", name: "InsideView", url: "https://www.insideview.com/" },
+            { category: "Sales & Marketing", name: "Leadfeeder", url: "https://www.leadfeeder.com/" },
+            { category: "Web Scraping", name: "Octoparse", url: "https://www.octoparse.com/" },
+            { category: "Lead Databases", name: "Lead411", url: "https://www.lead411.com/" },
+            { category: "Social Media Data", name: "Nimble", url: "https://www.nimble.com/" },
+            { category: "Data Extraction", name: "ParseHub", url: "https://www.parsehub.com/" },
+            { category: "B2B Directories", name: "Yellow Pages", url: "https://www.yellowpages.com/" },
+            { category: "B2B Directories", name: "Yelp Business", url: "https://biz.yelp.com/" },
+            { category: "Freelance Marketplaces", name: "Upwork", url: "https://www.upwork.com/" },
+            { category: "Freelance Marketplaces", name: "Fiverr", url: "https://www.fiverr.com/" },
+            { category: "Lead Prospecting", name: "Uplead", url: "https://www.uplead.com/" },
+            { category: "Business Directories", name: "Angie's List", url: "https://www.angi.com/" },
+            { category: "B2B Lead Generation", name: "Lusha", url: "https://www.lusha.com/" },
+            { category: "Job Boards", name: "Indeed", url: "https://www.indeed.com/" },
+            { category: "Job Boards", name: "Glassdoor", url: "https://www.glassdoor.com/" },
+            { category: "CRM & Lead Management", name: "Zoho CRM", url: "https://www.zoho.com/crm/" }
+        ];
+
+        let currentPage = 1;
+        const rowsPerPage = 20;
+        document.getElementById("totalRecords").innerText = data.length;
+
+        function displayTable(page) {
+            let start = (page - 1) * rowsPerPage;
+            let end = start + rowsPerPage;
+            let rows = data.slice(start, end).map(item => `
+                <tr>
+                    <td>${item.category}</td>
+                    <td>${item.name}</td>
+                    <td><a href="${item.url}" target="_blank">Visit</a></td>
+                    <td><button onclick="copyToClipboard(this)">Copy</button></td>
+                </tr>
+            `).join('');
+            document.getElementById("tableBody").innerHTML = rows;
+            updatePagination(page);
+        }
+
+        function updatePagination(page) {
+            let totalPages = Math.ceil(data.length / rowsPerPage);
+            let paginationHTML = `<li class="page-item ${page === 1 ? 'disabled' : ''}"><a class="page-link" href="#" onclick="displayTable(1)">First</a></li>`;
+            for (let i = Math.max(1, page - 5); i <= Math.min(totalPages, page + 5); i++) {
+                paginationHTML += `<li class="page-item ${i === page ? 'active' : ''}"><a class="page-link" href="#" onclick="displayTable(${i})">${i}</a></li>`;
+            }
+            paginationHTML += `<li class="page-item ${page === totalPages ? 'disabled' : ''}"><a class="page-link" href="#" onclick="displayTable(${totalPages})">Last</a></li>`;
+            document.getElementById("pagination").innerHTML = paginationHTML;
+        }
+
+        displayTable(1);
+    </script>
+</body>
+</html>

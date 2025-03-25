@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Lead Generation Directories</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f8f9fa; }
+        .container { margin-top: 20px; }
+        .table { background: white; }
+        .dark-mode { background-color: #343a40; color: white; }
+        .dark-mode .table { background: #454d55; color: white; }
+        .dark-mode .table-dark { background: #212529; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 class="text-center my-4">Lead Generation Directories & Tools</h2>
+        <div class="d-flex justify-content-between mb-3">
+            <input type="text" id="searchInput" class="form-control w-50" placeholder="Search directories...">
+            <button class="btn btn-primary" onclick="exportToCSV()">Download CSV</button>
+            <button class="btn btn-dark" onclick="toggleDarkMode()">Toggle Dark Mode</button>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped" id="directoryTable">
+                <thead class="table-dark">
+                    <tr>
+                        <th onclick="sortTable(0)">Category</th>
+                        <th onclick="sortTable(1)">Directory/Tool Name</th>
+                        <th>URL</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Local Business Directories</td><td>Google My Business</td><td><a href="https://www.google.com/business/" target="_blank">Visit</a></td><td><button onclick="copyToClipboard(this)">Copy</button></td></tr>
+                    <tr><td>Local Business Directories</td><td>Bing Places</td><td><a href="https://www.bingplaces.com" target="_blank">Visit</a></td><td><button onclick="copyToClipboard(this)">Copy</button></td></tr>
+                    <tr><td>Email & Contact Extraction</td><td>Hunter.io</td><td><a href="https://hunter.io" target="_blank">Visit</a></td><td><button onclick="copyToClipboard(this)">Copy</button></td></tr>
+                    <tr><td>CRM & Lead Management</td><td>HubSpot CRM</td><td><a href="https://www.hubspot.com/crm" target="_blank">Visit</a></td><td><button onclick="copyToClipboard(this)">Copy</button></td></tr>
+                    <tr><td>Email & Contact Extraction</td><td>Snov.io</td><td><a href="https://snov.io" target="_blank">Visit</a></td><td><button onclick="copyToClipboard(this)">Copy</button></td></tr>
+                    <tr><td>Social Media Lead Gen</td><td>LinkedIn Sales Navigator</td><td><a href="https://business.linkedin.com/sales-solutions" target="_blank">Visit</a></td><td><button onclick="copyToClipboard(this)">Copy</button></td></tr>
+                    <tr><td>Marketing Automation</td><td>Mailchimp</td><td><a href="https://mailchimp.com" target="_blank">Visit</a></td><td><button onclick="copyToClipboard(this)">Copy</button></td></tr>
+                    <tr><td>Sales Intelligence</td><td>ZoomInfo</td><td><a href="https://www.zoominfo.com" target="_blank">Visit</a></td><td><button onclick="copyToClipboard(this)">Copy</button></td></tr>
+                    <tr><td>Sales Automation</td><td>Apollo.io</td><td><a href="https://www.apollo.io" target="_blank">Visit</a></td><td><button onclick="copyToClipboard(this)">Copy</button></td></tr>
+                    <tr><td>Lead Enrichment</td><td>Clearbit</td><td><a href="https://clearbit.com" target="_blank">Visit</a></td><td><button onclick="copyToClipboard(this)">Copy</button></td></tr>
+                    <tr><td>Cold Emailing</td><td>Woodpecker</td><td><a href="https://woodpecker.co" target="_blank">Visit</a></td><td><button onclick="copyToClipboard(this)">Copy</button></td></tr>
+					 <tr><td>Local Business Directories</td><td>Google My Business</td><td><a href="https://www.google.com/business/" target="_blank">Visit</a></td><td><button onclick="copyToClipboard(this)">Copy</button></td></tr>
+                    <tr><td>Local Business Directories</td><td>Bing Places</td><td><a href="https://www.bingplaces.com" target="_blank">Visit</a></td><td><button onclick="copyToClipboard(this)">Copy</button></td></tr>
+                    <tr><td>Email & Contact Extraction</td><td>Hunter.io</td><td><a href="https://hunter.io" target="_blank">Visit</a></td><td><button onclick="copyToClipboard(this)">Copy</button></td></tr>
+                    <tr><td>CRM & Lead Management</td><td>HubSpot CRM</td><td><a href="https://www.hubspot.com/crm" target="_blank">Visit</a></td><td><button onclick="copyToClipboard(this)">Copy</button></td></tr>
+                    <tr><td>Email & Contact Extraction</td><td>Snov.io</td><td><a href="https://snov.io" target="_blank">Visit</a></td><td><button onclick="copyToClipboard(this)">Copy</button></td></tr>
+                    <tr><td>Social Media Lead Gen</td><td>LinkedIn Sales Navigator</td><td><a href="https://business.linkedin.com/sales-solutions" target="_blank">Visit</a></td><td><button onclick="copyToClipboard(this)">Copy</button></td></tr>
+                    <tr><td>Marketing Automation</td><td>Mailchimp</td><td><a href="https://mailchimp.com" target="_blank">Visit</a></td><td><button onclick="copyToClipboard(this)">Copy</button></td></tr>
+                    <tr><td>Sales Intelligence</td><td>ZoomInfo</td><td><a href="https://www.zoominfo.com" target="_blank">Visit</a></td><td><button onclick="copyToClipboard(this)">Copy</button></td></tr>
+                    <tr><td>Sales Automation</td><td>Apollo.io</td><td><a href="https://www.apollo.io" target="_blank">Visit</a></td><td><button onclick="copyToClipboard(this)">Copy</button></td></tr>
+                    <tr><td>Lead Enrichment</td><td>Clearbit</td><td><a href="https://clearbit.com" target="_blank">Visit</a></td><td><button onclick="copyToClipboard(this)">Copy</button></td></tr>
+                    <tr><td>Cold Emailing</td><td>Woodpecker</td><td><a href="https://woodpecker.co" target="_blank">Visit</a></td><td><button onclick="copyToClipboard(this)">Copy</button></td></tr>
+                    <tr><td>Cold Emailing</td><td>Lemlist</td><td><a href="https://lemlist.com" target="_blank">Visit</a></td><td><button onclick="copyToClipboard(this)">Copy</button></td></tr>
+                    <tr><td>Data Scraping</td><td>Scrapy</td><td><a href="https://scrapy.org" target="_blank">Visit</a></td><td><button onclick="copyToClipboard(this)">Copy</button></td></tr>
+                    <tr><td>Sales Engagement</td><td>Outreach.io</td><td><a href="https://www.outreach.io" target="_blank">Visit</a></td><td><button onclick="copyToClipboard(this)">Copy</button></td></tr>
+                    <tr><td>Customer Intelligence</td><td>InsideView</td><td><a href="https://www.insideview.com" target="_blank">Visit</a></td><td><button onclick="copyToClipboard(this)">Copy</button></td></tr>
+                    <tr><td>Sales & Marketing</td><td>Leadfeeder</td><td><a href="https://www.leadfeeder.com" target="_blank">Visit</a></td><td><button onclick="copyToClipboard(this)">Copy</button></td></tr>
+                    <tr><td>Web Scraping</td><td>Octoparse</td><td><a href="https://www.octoparse.com" target="_blank">Visit</a></td><td><button onclick="copyToClipboard(this)">Copy</button></td></tr>
+                    <tr><td>Lead Databases</td><td>Lead411</td><td><a href="https://www.lead411.com" target="_blank">Visit</a></td><td><button onclick="copyToClipboard(this)">Copy</button></td></tr>
+                    <tr><td>Social Media Data</td><td>Nimble</td><td><a href="https://www.nimble.com" target="_blank">Visit</a></td><td><button onclick="copyToClipboard(this)">Copy</button></td></tr>
+                    <tr><td>Data Extraction</td><td>ParseHub</td><td><a href="https://www.parsehub.com" target="_blank">Visit</a></td><td><button onclick="copyToClipboard(this)">Copy</button></td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script>
+        function sortTable(n) {
+            let table = document.getElementById("directoryTable");
+            let rows = Array.from(table.rows).slice(1);
+            let sorted = rows.sort((a, b) => a.cells[n].innerText.localeCompare(b.cells[n].innerText));
+            rows.forEach(row => table.appendChild(row));
+        }
+        
+        function copyToClipboard(button) {
+            let text = button.parentElement.parentElement.innerText;
+            navigator.clipboard.writeText(text);
+            alert("Copied: " + text);
+        }
+        
+        function toggleDarkMode() {
+            document.body.classList.toggle("dark-mode");
+        }
+        
+        function exportToCSV() {
+            let csvContent = "data:text/csv;charset=utf-8,Category,Directory,URL\n";
+            document.querySelectorAll("#directoryTable tbody tr").forEach(row => {
+                let cols = row.querySelectorAll("td");
+                let rowData = [cols[0].innerText, cols[1].innerText, cols[2].innerText];
+                csvContent += rowData.join(",") + "\n";
+            });
+            let encodedUri = encodeURI(csvContent);
+            let link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "lead_generation_directories.csv");
+            document.body.appendChild(link);
+            link.click();
+        }
+        
+        document.getElementById("searchInput").addEventListener("keyup", function() {
+            let filter = this.value.toLowerCase();
+            let rows = document.querySelectorAll("#directoryTable tbody tr");
+            rows.forEach(row => {
+                let text = row.innerText.toLowerCase();
+                row.style.display = text.includes(filter) ? "" : "none";
+            });
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

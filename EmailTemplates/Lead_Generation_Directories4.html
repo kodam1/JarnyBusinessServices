@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Lead Generation Directories</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f8f9fa; }
+        .container { margin-top: 20px; }
+        .table { background: white; }
+        .dark-mode { background-color: #343a40; color: white; }
+        .dark-mode .table { background: #454d55; color: white; }
+        .dark-mode .table-dark { background: #212529; }
+        .pagination { justify-content: center; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 class="text-center my-4">Lead Generation Directories & Tools</h2>
+        <p class="text-center">Total Records: <span id="totalRecords"></span></p>
+        <div class="d-flex justify-content-between mb-3">
+            <input type="text" id="searchInput" class="form-control w-50" placeholder="Search directories..." onkeyup="filterTable()">
+            <button class="btn btn-primary" onclick="exportToCSV()">Download CSV</button>
+            <button class="btn btn-dark" onclick="toggleDarkMode()">Toggle Dark Mode</button>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped" id="directoryTable">
+                <thead class="table-dark">
+                    <tr>
+                        <th onclick="sortTable(0)">Category</th>
+                        <th onclick="sortTable(1)">Directory/Tool Name</th>
+                        <th>URL</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <!-- Data dynamically added -->
+                </tbody>
+            </table>
+        </div>
+        <nav>
+            <ul class="pagination" id="pagination"></ul>
+        </nav>
+    </div>
+    <script>
+        const data = [];
+        for (let i = 1; i <= 1000; i++) {
+            data.push({ category: `Category ${i}`, name: `Tool ${i}`, url: `https://example.com/tool${i}` });
+        }
+
+        let currentPage = 1;
+        const rowsPerPage = 20;
+        document.getElementById("totalRecords").innerText = data.length;
+
+        function displayTable(page) {
+            let start = (page - 1) * rowsPerPage;
+            let end = start + rowsPerPage;
+            let rows = data.slice(start, end).map(item => `
+                <tr>
+                    <td>${item.category}</td>
+                    <td>${item.name}</td>
+                    <td><a href="${item.url}" target="_blank">Visit</a></td>
+                    <td><button onclick="copyToClipboard(this)">Copy</button></td>
+                </tr>
+            `).join('');
+            document.getElementById("tableBody").innerHTML = rows;
+            updatePagination(page);
+        }
+
+        function updatePagination(page) {
+            let totalPages = Math.ceil(data.length / rowsPerPage);
+            let paginationHTML = `<li class="page-item ${page === 1 ? 'disabled' : ''}"><a class="page-link" href="#" onclick="displayTable(1)">First</a></li>`;
+            for (let i = Math.max(1, page - 5); i <= Math.min(totalPages, page + 5); i++) {
+                paginationHTML += `<li class="page-item ${i === page ? 'active' : ''}"><a class="page-link" href="#" onclick="displayTable(${i})">${i}</a></li>`;
+            }
+            paginationHTML += `<li class="page-item ${page === totalPages ? 'disabled' : ''}"><a class="page-link" href="#" onclick="displayTable(${totalPages})">Last</a></li>`;
+            document.getElementById("pagination").innerHTML = paginationHTML;
+        }
+
+        displayTable(1);
+    </script>
+</body>
+</html>
